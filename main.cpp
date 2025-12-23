@@ -1,9 +1,25 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
+
+struct Endpoint {
+    std::string Type;
+    std::string Url;
+    std::string Model;
+};
+
+// nlohmann::json → Endpoint
+inline Endpoint toEndpoint(const nlohmann::json& json) {
+    return Endpoint{
+        .Type  = json.at("type").get<std::string>(),
+        .Url   = json.at("url").get<std::string>(),
+        .Model = json.at("model").get<std::string>()
+    };
+}
 
 int main() {
     namespace fs = std::filesystem;
@@ -33,6 +49,12 @@ int main() {
     std::cout << "URL: " << url << "\n";
     std::cout << "Model: " << model << "\n";
     std::cout << "Log level: " << logLevel << "\n";
+
+    // 
+    Endpoint endpoint = toEndpoint(config.at("endpoint"));
+    std::cout << "Type: "  << endpoint.Type  << '\n'
+              << "Url: "   << endpoint.Url   << '\n'
+              << "Model: " << endpoint.Model << '\n';
 
     return 0;
 }
