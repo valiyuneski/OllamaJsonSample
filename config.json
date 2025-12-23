@@ -1,0 +1,8 @@
+{
+    "endpoint": {
+        "type": "ollama",
+        "url": "http://localhost:11434",
+        "model": "qwen2.5-coder:1.5b"
+    },
+    "log_level": "info"
+}
