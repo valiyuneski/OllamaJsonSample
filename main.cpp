@@ -48,6 +48,18 @@ public:
         }
     }
 
+    template<typename T>
+    static std::optional<T> GetValueFromJson(const nlohmann::json& json, const std::string& name) {
+        try {
+            if (!json.contains(name)) {
+                return std::nullopt;
+            }
+            return json[name].get<T>();
+        } catch (std::exception& e) {
+            return std::nullopt;
+        }
+    }
+
 private:
     // different nlohmann data access methods in each
     static inline UserDto toUser(nlohmann::json const& json) {
@@ -107,6 +119,22 @@ int main() {
 
     using Dto = std::variant<UserDto, ProductDto, OrderDto>;
     std::vector<Dto> dtos = {usrDto, proDto, ordDto};
+
+    // Get string value
+    auto name = JsonVisitor::GetValueFromJson<std::string>(user, "name");
+    if (name) {
+        std::cout << "Name: " << *name << std::endl;  // Output: Name: John Doe
+    }
+    // Get integer value
+    auto id = JsonVisitor::GetValueFromJson<int>(user, "id");
+    if (id) {
+        std::cout << "ID: " << *id << std::endl;  // Output: ID: 42
+    }
+    // Non-existent key
+    auto age = JsonVisitor::GetValueFromJson<int>(user, "age");
+    if (!age) {
+        std::cout << "Age not found" << std::endl;  // This will be printed
+    }
 
     // ready to use visitor
     for (auto const& dto : dtos) {
