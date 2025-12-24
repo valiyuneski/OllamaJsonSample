@@ -93,9 +93,9 @@ private:
 int main() {
     // prepare dummy data
     nlohmann::json user = {
-        {"name", "hakan gedek"},
+        {"name", "John Doe"},
         {"id", 1},
-        {"email", "hgedek@pm.me"}
+        {"email", "JohnDoe@pm.me"}
     };
 
     nlohmann::json product = {
